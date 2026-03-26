@@ -1,5 +1,9 @@
+import useTest from "./test.service";
+
 const Test = () => {
-  return <div>Test</div>;
+  const { renderContent } = useTest();
+
+  return <>{renderContent()}</>;
 };
 
 export default Test;

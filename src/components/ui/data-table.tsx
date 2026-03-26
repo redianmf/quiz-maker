@@ -24,6 +24,8 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   searchBy: keyof TData;
   isLoading: boolean;
+  actionButton?: React.ReactNode;
+  onRowClick?: (row: TData) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -31,6 +33,8 @@ export function DataTable<TData, TValue>({
   data,
   searchBy,
   isLoading,
+  actionButton,
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -47,7 +51,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex justify-between items-center py-4">
         <Input
           placeholder="Search..."
           value={
@@ -62,6 +66,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        {actionButton && actionButton}
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
@@ -99,6 +104,14 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={(e) => {
+                    const target = e.target as HTMLElement;
+
+                    if (target.closest('[data-slot="dropdown-menu-item"]'))
+                      return;
+                    onRowClick?.(row.original);
+                  }}
+                  className="cursor-pointer hover:bg-muted"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

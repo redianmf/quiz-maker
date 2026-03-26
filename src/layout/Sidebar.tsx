@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -16,9 +15,9 @@ export const AppSidebar = () => {
   const { pathname } = useLocation();
 
   return (
-    <Sidebar>
-      <SidebarHeader>Quiz App</SidebarHeader>
-      <SidebarContent>
+    <Sidebar className="flex flex-col">
+      <SidebarHeader className="shrink-0">Quiz App</SidebarHeader>
+      <SidebarContent className="flex-1 min-h-0 overflow-auto">
         <SidebarMenu className="py-2">
           {routes.map(
             (route) =>
@@ -41,7 +40,6 @@ export const AppSidebar = () => {
           )}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter />
     </Sidebar>
   );
 };
