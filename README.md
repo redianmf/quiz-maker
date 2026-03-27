@@ -13,6 +13,8 @@ cp .env.example .env
 
 # 3) Start the server (make sure Backend service is running)
 npm run dev
+
+* if there is a trouble from installation, kindly switch to node version 24.14.1
 ```
 
 The app will run at http://localhost:5173
