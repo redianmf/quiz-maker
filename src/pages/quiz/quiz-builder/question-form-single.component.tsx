@@ -67,7 +67,7 @@ const QuestionFormSingle = ({
               <FieldError>{errors.prompt?.message}</FieldError>
             </Field>
 
-            <Field>
+            {/* <Field>
               <FieldLabel>Code Snippet</FieldLabel>
               <pre className="rounded-lg bg-muted p-4 overflow-x-auto">
                 <code>
@@ -78,7 +78,7 @@ const QuestionFormSingle = ({
 </Field>`}
                 </code>
               </pre>
-            </Field>
+            </Field> */}
 
             <Field>
               <FieldLabel>Type</FieldLabel>
@@ -102,7 +102,7 @@ const QuestionFormSingle = ({
 
             {selectedType === "mcq" && (
               <Field>
-                <FieldLabel>Choices (comma separated)</FieldLabel>
+                <FieldLabel>Options</FieldLabel>
                 <Controller
                   control={control}
                   name="options"
