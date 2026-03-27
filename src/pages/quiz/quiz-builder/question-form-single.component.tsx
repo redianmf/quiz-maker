@@ -97,6 +97,7 @@ const QuestionFormSingle = ({
                   </Select>
                 )}
               />
+              <FieldError>{errors.type?.message}</FieldError>
             </Field>
 
             {selectedType === "mcq" && (

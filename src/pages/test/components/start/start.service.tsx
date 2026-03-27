@@ -21,7 +21,16 @@ const useStartTest = () => {
   const mutation = useMutation({
     mutationFn: startAttempt,
     onSuccess: (attempt) => {
-      setAttempt(attempt);
+      const _attempt = {
+        ...attempt,
+      };
+
+      _attempt.answers = attempt?.quiz?.questions?.map((question) => ({
+        questionId: question?.id || 0,
+        value: "",
+      }));
+
+      setAttempt(_attempt);
       setStage(TestStage[1]);
       toast.success("Quiz attempt started, please answer the questions", {
         duration: 2000,

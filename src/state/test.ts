@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import {
   TestStage,
+  type IAnswer,
   type IAttempt,
+  type IAttemptResult,
   type TestStageType,
 } from "../pages/test/test.interface";
 
@@ -11,6 +13,10 @@ type TestDataState = {
 
   attempt: IAttempt | null;
   setAttempt: (attempt: IAttempt | null) => void;
+  setAnswerAtIndex: (index: number, value: IAnswer) => void;
+
+  attemptResult: IAttemptResult | null;
+  setAttemptResult: (result: IAttemptResult | null) => void;
 };
 
 export const useTestData = create<TestDataState>((set) => ({
@@ -19,4 +25,27 @@ export const useTestData = create<TestDataState>((set) => ({
 
   attempt: null,
   setAttempt: (attempt: IAttempt | null) => set({ attempt }),
+  setAnswerAtIndex: (index: number, value: IAnswer) => {
+    set((state) => {
+      if (!state.attempt) return state;
+      const answers = [...(state.attempt.answers || [])];
+
+      while (answers.length <= index) {
+        answers.push({ questionId: 0, value: "" });
+      }
+
+      answers[index] = value;
+
+      return {
+        attempt: {
+          ...state.attempt,
+          answers,
+        },
+      };
+    });
+  },
+
+  attemptResult: null,
+  setAttemptResult: (result: IAttemptResult | null) =>
+    set({ attemptResult: result }),
 }));

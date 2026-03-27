@@ -8,11 +8,25 @@ export const TestStage = {
 
 export type TestStageType = (typeof TestStage)[keyof typeof TestStage];
 
+export interface IAnswer {
+  questionId: number;
+  value: string;
+}
+
 export interface IAttempt {
   id: number;
   quizId: string;
   startedAt: string;
   submittedAt: string | null;
-  answers: string[];
+  answers: IAnswer[];
   quiz: IQuizDetails;
+}
+
+export interface IAttemptResult {
+  score: number;
+  details: {
+    questionId: number;
+    correct: boolean;
+    expected?: string;
+  }[];
 }

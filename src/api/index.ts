@@ -74,7 +74,7 @@ export async function get<T>(
 
 export async function post<T>(
   endpoint: string,
-  body: unknown,
+  body?: unknown,
   options?: RequestOptions,
 ): Promise<T> {
   return request<T>(endpoint, "POST", body, options);

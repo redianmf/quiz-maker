@@ -2,7 +2,6 @@ import type { JSX } from "react";
 import Home from "@/pages/home/home.component";
 import Quiz from "@/pages/quiz/quiz.component";
 import Test from "@/pages/test/test.component";
-import QuizBuilder from "@/pages/quiz/quiz-builder/quiz-builder.component";
 import QuizDetails from "@/pages/quiz/quiz-details/details.component";
 
 interface IRoute {
@@ -29,12 +28,6 @@ export const routes: IRoute[] = [
     path: "/quiz/details/:id",
     text: "Quiz Details",
     element: QuizDetails,
-    showMenu: false,
-  },
-  {
-    path: "/quiz-builder",
-    text: "Quiz Builder",
-    element: QuizBuilder,
     showMenu: false,
   },
   {
