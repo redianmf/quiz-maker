@@ -1,6 +1,8 @@
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { questionSchema, type QuestionFormValues } from "@/schemas/quiz";
+import ReactCodeMirror from "@uiw/react-codemirror";
+import { javascript } from "@codemirror/lang-javascript";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -69,16 +71,24 @@ const QuestionFormSingle = ({
 
             {/* <Field>
               <FieldLabel>Code Snippet</FieldLabel>
-              <pre className="rounded-lg bg-muted p-4 overflow-x-auto">
-                <code>
-                  {String.raw`<Field>
-  <FieldLabel>Question</FieldLabel>
-  <Input {...register("prompt")} />
-  <FieldError>{errors.prompt?.message}</FieldError>
-</Field>`}
-                </code>
-              </pre>
+              <Controller
+                name="prompt"
+                control={control}
+                render={({ field }) => (
+                  <ReactCodeMirror
+                    value={field.value}
+                    height="200px"
+                    onChange={(value) => field.onChange(value)}
+                    extensions={[javascript()]}
+                  />
+                )}
+              />
             </Field> */}
+
+            <Field>
+              <FieldLabel>Code Snippet</FieldLabel>
+              <ReactCodeMirror height="200px" extensions={[javascript()]} />
+            </Field>
 
             <Field>
               <FieldLabel>Type</FieldLabel>
