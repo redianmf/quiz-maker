@@ -44,7 +44,10 @@ export const columns = (
           <Button
             variant="outline"
             size="icon-xs"
-            onClick={() => copyToClipboard(id as string)}
+            onClick={(e) => {
+              e.stopPropagation();
+              copyToClipboard(id as string);
+            }}
           >
             <Copy className="h-2 w-2" />
           </Button>

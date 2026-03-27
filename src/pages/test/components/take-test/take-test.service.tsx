@@ -1,4 +1,4 @@
-import { chooseAnswer, submitTest } from "@/repositories/test";
+import { chooseAnswer, recordEvent, submitTest } from "@/repositories/test";
 import { takeTestSchema, type TakeTestType } from "@/schemas/test";
 import { useTestData } from "@/state/test";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,51 +7,11 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { TestStage, type IAnswer } from "../../test.interface";
-import type { ChooseAnswerPayload } from "./take-test.interface";
-
-// const attempt = {
-//   id: 3,
-//   quizId: "1",
-//   startedAt: "2026-03-26 12:43:13.160",
-//   submittedAt: null,
-//   answers: [
-//     {
-//       questionId: 1,
-//       value: "",
-//     },
-//   ],
-//   quiz: {
-//     id: 1,
-//     title: "JavaScript Basics",
-//     description: "A tiny quiz on core JS",
-//     timeLimitSeconds: 400,
-//     questions: [
-//       {
-//         id: 1,
-//         quizId: 1,
-//         type: "mcq",
-//         prompt: "Which of the following is NOT a primitive type in JavaScript?",
-//         options: ["string", "number", "boolean", "array"],
-//         position: 0,
-//       },
-//       {
-//         id: 2,
-//         quizId: 1,
-//         type: "short",
-//         prompt:
-//           "What keyword declares a block-scoped variable introduced in ES6?",
-//         position: 1,
-//       },
-//       {
-//         id: 3,
-//         quizId: 1,
-//         type: "code",
-//         prompt: "Write a function `sum(a,b)` that returns a + b.",
-//         position: 2,
-//       },
-//     ],
-//   },
-// };
+import {
+  RecordEventType,
+  type ChooseAnswerPayload,
+  type RecordEventPayload,
+} from "./take-test.interface";
 
 const useTakeTest = () => {
   const attempt = useTestData((state) => state.attempt);
@@ -106,11 +66,14 @@ const useTakeTest = () => {
     },
   });
 
+  const eventMutation = useMutation({
+    mutationFn: ({ attemptId, data }: RecordEventPayload) =>
+      recordEvent(attemptId, data),
+  });
+
   const handlePrevious = () => {
     if (!isFirstQuestion) setQuestionIdx((prev) => prev - 1);
   };
-
-  console.log(attempt, "attempt");
 
   const handleNext = () => {
     if (!isLastQuestion) setQuestionIdx((prev) => prev + 1);
@@ -140,6 +103,36 @@ const useTakeTest = () => {
 
   useEffect(() => {
     if (!attempt?.id) setStage(TestStage[0]);
+  }, []);
+
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      const pastedText = e.clipboardData?.getData("text");
+      if (!pastedText || !attempt?.id) return;
+
+      eventMutation.mutate({
+        attemptId: attempt.id,
+        data: { event: RecordEventType.paste },
+      });
+    };
+
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
+  }, []);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden" && attempt?.id) {
+        eventMutation.mutate({
+          attemptId: attempt.id,
+          data: { event: RecordEventType.switch },
+        });
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
   return {
