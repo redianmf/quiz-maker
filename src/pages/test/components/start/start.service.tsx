@@ -10,6 +10,7 @@ import { TestStage } from "../../test.interface";
 const useStartTest = () => {
   const setStage = useTestData((state) => state.setStage);
   const setAttempt = useTestData((state) => state.setAttempt);
+  const setEvents = useTestData((state) => state.setEvents);
 
   const form = useForm<StartTestType>({
     resolver: zodResolver(startTestSchema),
@@ -32,6 +33,7 @@ const useStartTest = () => {
 
       setAttempt(_attempt);
       setStage(TestStage[1]);
+      setEvents(null);
       toast.success("Quiz attempt started, please answer the questions", {
         duration: 2000,
         position: "top-right",

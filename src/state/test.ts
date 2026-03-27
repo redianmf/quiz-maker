@@ -6,6 +6,7 @@ import {
   type IAttemptResult,
   type TestStageType,
 } from "../pages/test/test.interface";
+import type { IRecordEvent } from "@/pages/test/components/take-test/take-test.interface";
 
 type TestDataState = {
   stage: TestStageType;
@@ -17,6 +18,10 @@ type TestDataState = {
 
   attemptResult: IAttemptResult | null;
   setAttemptResult: (result: IAttemptResult | null) => void;
+
+  events: IRecordEvent[] | null;
+  setEvent: (event: IRecordEvent) => void;
+  setEvents: (events: IRecordEvent[] | null) => void;
 };
 
 export const useTestData = create<TestDataState>((set) => ({
@@ -48,4 +53,11 @@ export const useTestData = create<TestDataState>((set) => ({
   attemptResult: null,
   setAttemptResult: (result: IAttemptResult | null) =>
     set({ attemptResult: result }),
+
+  events: null,
+  setEvent: (event) =>
+    set((state) => ({
+      events: state.events ? [...state.events, event] : [event],
+    })),
+  setEvents: (events: IRecordEvent[] | null) => set({ events }),
 }));

@@ -10,20 +10,14 @@ import {
 import { useTestData } from "@/state/test";
 import { ArrowBigLeft, Check, X } from "lucide-react";
 import { TestStage } from "../../test.interface";
-import { useQuery } from "@tanstack/react-query";
-import { getRecordedEvent } from "@/repositories/test";
 import { RecordEventType } from "../take-test/take-test.interface";
 
 const Result = () => {
-  const attempt = useTestData((state) => state.attempt);
   const attemptResult = useTestData((state) => state.attemptResult);
+  const events = useTestData((state) => state.events);
   const setStage = useTestData((state) => state.setStage);
-  const event = useQuery({
-    queryKey: ["events"],
-    queryFn: () => getRecordedEvent(attempt?.id),
-  });
 
-  const result = event?.data?.reduce(
+  const result = events?.reduce(
     (acc, item) => {
       const type = item.event;
 
@@ -51,7 +45,7 @@ const Result = () => {
       <section className="flex-1 flex flex-col gap-3">
         <div className="text-sm font-semibold">
           <p>Overall Score : {attemptResult?.score || 0}</p>
-          {event?.data && event?.data?.length > 0 && (
+          {events && events?.length > 0 && (
             <p className="text-red-500">
               {result?.tabSwitched || 0} times tab switched and{" "}
               {result?.textPasted || 0} times text pasted

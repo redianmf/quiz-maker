@@ -18,6 +18,7 @@ const useTakeTest = () => {
   const setAnswerByIndex = useTestData((state) => state.setAnswerAtIndex);
   const setStage = useTestData((state) => state.setStage);
   const setAttemptResult = useTestData((state) => state.setAttemptResult);
+  const setEvent = useTestData((state) => state.setEvent);
 
   const [questionIdx, setQuestionIdx] = useState<number>(0);
   const currentQuestion = attempt?.quiz?.questions?.[questionIdx];
@@ -114,6 +115,12 @@ const useTakeTest = () => {
         attemptId: attempt.id,
         data: { event: RecordEventType.paste },
       });
+
+      setEvent({
+        event: RecordEventType.paste,
+        attempt_id: attempt.id,
+        timestamp: new Date().toISOString(),
+      });
     };
 
     window.addEventListener("paste", handlePaste);
@@ -126,6 +133,12 @@ const useTakeTest = () => {
         eventMutation.mutate({
           attemptId: attempt.id,
           data: { event: RecordEventType.switch },
+        });
+
+        setEvent({
+          event: RecordEventType.switch,
+          attempt_id: attempt.id,
+          timestamp: new Date().toISOString(),
         });
       }
     };
